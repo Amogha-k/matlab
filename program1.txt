@@ -1,0 +1,111 @@
+1. % Verification of trigonometric identity
+x = pi / 5;
+lhs = cos(x/2)^2;
+rhs = (tan(x) + sin(x)) / (2 * tan(x));
+disp(['Left-hand side (LHS): ', num2str(lhs)]);
+disp(['Right-hand side (RHS): ', num2str(rhs)]);
+if abs(lhs - rhs) < 1e-10
+    disp('The identity is verified!');
+else
+    disp('The identity is not verified.');
+end
+
+2. % Temperature calculation
+T0 = 120; % Initial temperature
+Ts = 38; % Surrounding temperature
+k = 0.45; % Cooling constant
+t = 3; % Time in hours
+T = Ts + (T0 - Ts) * exp(-k * t);
+disp(['The temperature of the soda can after 3 hours is ', num2str(round(T)), '°F.']);
+
+3. % Coefficient of friction calculation
+m = [2, 4, 5, 10, 20, 50]; % Mass in kg
+F = [12.5, 23.5, 30, 61, 117, 294]; % Force in N
+g = 9.81; % Acceleration due to gravity
+mu = F ./ (m * g); % Coefficient of friction
+average_mu = mean(mu); % Average coefficient of friction
+disp('Coefficient of friction for each test:');
+disp(mu);
+disp(['Average coefficient of friction: ', num2str(average_mu)]);
+
+4. % Piston motion analysis
+r = 120; % Radius in mm
+l = 250; % Length in mm
+rpm = 500; % Rotations per minute
+omega = 2 * pi * rpm / 60; % Angular velocity
+t = linspace(0, 2 * pi / omega, 1000); % Time array
+theta = omega * t; % Angular position
+x = r * cos(theta) + sqrt(l^2 - (r * sin(theta)).^2); % Position
+v = -r * omega * sin(theta) - (r^2 * omega * cos(theta) .* sin(theta)) ./ sqrt(l^2 - (r * sin(theta)).^2); % Velocity
+a = -r * omega^2 * cos(theta) - (r^2 * omega^2 * (cos(theta).^2 - sin(theta).^2)) ./ sqrt(l^2 - (r * sin(theta)).^2); % Acceleration
+plot(t, x, 'b', t, v, 'r', t, a, 'g');
+legend('Position (mm)', 'Velocity (mm/s)', 'Acceleration (mm/s^2)');
+xlabel('Time (s)');
+grid on;
+title('Piston Position, Velocity, and Acceleration');
+
+5. % Projectile motion with and without wind
+v0 = 250; % Initial velocity in m/s
+theta = deg2rad(65); % Angle in radians
+w = 30; % Wind velocity in m/s
+g = 9.81; % Gravity
+t = linspace(0, 2 * v0 * sin(theta) / g, 1000); % Time array
+z = v0 * sin(theta) * t - 0.5 * g * t.^2; % Height
+y = v0 * cos(theta) * t; % Horizontal distance
+x = w * t; % Wind displacement
+plot3(0 * t, y, z, 'b', x, y, z, 'r');
+grid on;
+xlabel('West (m)'); ylabel('North (m)'); zlabel('Height (m)');
+legend('No Wind', 'With Wind');
+title('Projectile Trajectory');
+
+6. % Balance and withdrawals over time
+b = 300000; % Initial balance
+w = 25000; % Initial withdrawal
+r = 0.05; % Interest rate
+inf = 0.02; % Inflation rate
+y = 0; % Year counter
+while b > 0
+    y = y + 1;
+    b = b * (1 + r) - w;
+    B(y) = b; % Balance over years
+    W(y) = w; % Withdrawal over years
+    w = w * (1 + inf); % Adjusted withdrawal
+end
+plot(1:y, W, 'r', 1:y, [300000 B(1:end-1)], 'b');
+xlabel('Year'); ylabel('Amount ($)');
+grid on;
+legend('Withdrawals', 'Balance');
+title('Withdrawals and Balance');
+
+7. % Random order of performance
+singers = {'John', 'Mary', 'Tracy', 'Mike', 'Katie', 'David'};
+random_order = singers(randperm(length(singers)));
+disp('Random order of performance:');
+disp(random_order);
+
+8. % Projectile motion analysis
+function [h_max, d_max] = projectile(v0, theta)
+    g = 9.81; % Gravity
+    theta = deg2rad(theta); % Convert angle to radians
+    h_max = (v0^2 * sin(theta)^2) / (2 * g); % Maximum height
+    d_max = (v0^2 * sin(2 * theta)) / g; % Maximum distance
+    t = linspace(0, 2 * v0 * sin(theta) / g, 100); % Time array
+    plot(v0 * cos(theta) * t, v0 * sin(theta) * t - 0.5 * g * t.^2);
+    xlabel('Horizontal Distance (m)');
+    ylabel('Vertical Distance (m)');
+    grid on;
+end
+[v0, theta] = deal(230, 39);
+[h, d] = projectile(v0, theta);
+fprintf('Max Height: %.2f m, Max Distance: %.2f m\n', h, d);
+
+9. % Box thickness calculation
+function thickness = box_thickness(weight)
+    L = 24; W = 12; H = 4; % Dimensions in inches
+    specific_weight = 0.101; % Specific weight
+    eq = @(x) x * (L * W + 2 * H * (L + W)) * specific_weight - weight;
+    thickness = fzero(eq, 0.1); % Initial guess for thickness
+end
+thickness = box_thickness(15);
+fprintf('The thickness of the box is %.4f inches\n', thickness);
